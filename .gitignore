@@ -1,0 +1,112 @@
+# ============================
+#  GENERAL
+# ============================
+*.log
+*.tmp
+*.bak
+*.old
+*.swp
+*.swo
+*.cache
+*.out
+*.temp
+*.tmp
+.DS_Store
+Thumbs.db
+
+# ============================
+#  IMÁGENES TEMPORALES
+# ============================
+*.png~
+*.jpg~
+*.jpeg~
+*.gif~
+*.bmp~
+
+# ============================
+#  CERTIFICADOS / KEYS / SECRETOS
+# ============================
+*.key
+*.pem
+*.pfx
+*.crt
+*.csr
+*.cer
+*.der
+*.p12
+
+# Wazuh artifacts
+wazuh-install-files.tar
+wazuh-certificates.tar
+
+# ============================
+#  ARCHIVOS COMPRIMIDOS GRANDES
+# ============================
+*.zip
+*.tar
+*.tar.gz
+*.tgz
+*.7z
+*.rar
+
+# ============================
+#  WAZUH / FILEBEAT / OPENSEARCH
+# ============================
+*.key.old
+filebeat.yml.old
+*.json.bak
+opensearch.*
+
+# ============================
+#  WINDOWS ARTIFACTS
+# ============================
+*.evtx   # logs de eventos Windows
+*.dmp    # memory dumps
+*.etl    # trace logs
+
+# ============================
+#  LINUX ARTIFACTS
+# ============================
+*.core
+*.pid
+
+# ============================
+#  PYTHON / SCRIPTS / JUNK
+# ============================
+__pycache__/
+*.pyc
+*.sh~
+
+# ============================
+#  EDITORES / IDE / SISTEMA
+# ============================
+.vscode/
+.idea/
+*.code-workspace
+
+# ============================
+#  OBSIDIAN
+# ============================
+.obsidian/
+.obsidian/workspace
+.obsidian/cache
+.obsidian/plugins/
+.obsidian/backups/
+.obsidian/snippets/
+
+# ============================
+#  ARCHIVOS GIGANTES (VMs, ISOs)
+# ============================
+*.iso
+*.vmdk
+*.vdi
+*.ova
+*.ovf
+*.qcow2
+*.img
+
+# ============================
+#  OTROS
+# ============================
+*.orig
+*.rej
