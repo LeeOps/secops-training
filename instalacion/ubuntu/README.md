@@ -247,5 +247,5 @@ La siguiente fase del laboratorio será:
 - Acceder al dashboard
 - Iniciar la configuración del SIEM
 
- ## 👉 [Ir a Instalación Wazu](../wazu/README.md)
+ ## 👉 [Ir a Instalación Wazuh](../wazuh/README.md)
 
