@@ -31,7 +31,7 @@ Aparecerá una lista con:
 
 Elige el **ID del agente que quieres eliminar**.
 
-![agentes](delete_agent.png)
+![agentes](img/delete_agent.png)
 
 ---
 ## 3. Entrar al gestor de agentes
@@ -46,6 +46,7 @@ Selecciona la opción: `R) Remove agent`
 
 
 ![agentes](img/delete_agent2.png)
+
 El sistema te pedirá:
 
 - **ID del agente a borrar**
