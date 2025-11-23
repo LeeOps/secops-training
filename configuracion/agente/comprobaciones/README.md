@@ -14,7 +14,7 @@ Buscar **Wazuh Agent**.: Debe estar en **Running**.
 Si no:
 - clic derecho → **Start**
     
-![agentes](ejecucion.png)
+![agentes](img/ejecucion.png)
 
 ---
 ## 2. Ver los logs del agente
@@ -54,7 +54,8 @@ Errores típicos:
 `Invalid key Unable to connect Connection refused`
 
 Ejemplos:
-![agentes](logs.png)
+
+![agentes](img/logs.png)
 
 ---
 ## 3. Confirmar que el agente aparece en el Dashboard
@@ -68,7 +69,7 @@ Ir a:
 ❌ Si sale en **Pending** → la clave no está bien  
 ❌ Si no aparece → no está conectado
 
-![agentes](active.png)
+![agentes](img/active.png)
 
 ---
 ## 4. Probar que envía eventos (prueba rápida)
@@ -79,7 +80,7 @@ Simplemente reinicia el servicio:
 
 `services.msc → Wazuh Agent → Restart`
 
-![agentes](reiniciar.png)
+![agentes](img/reiniciar.png)
 
 Verás en el Dashboard:
 
@@ -88,11 +89,11 @@ Verás en el Dashboard:
 
 Pulsa en vista para abrir el panel
 
-![agentes](restart1.png)
+![agentes](img/restart1.png)
 
 Arriba a la izquierda veras el "last keep alive" actualizado
 
-![agentes](restart2.png)
+![agentes](img/restart2.png)
 
 ---
 ## 5. Señales de que el agente funciona correctamente
