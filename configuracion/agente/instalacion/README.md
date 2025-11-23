@@ -1,4 +1,4 @@
-# 🟦 **Instalación y Registro de los Agentes de Wazuh**
+# **Instalación y Registro de los Agentes de Wazuh**
 
 En este punto del laboratorio, el servidor Wazuh ya está funcionando correctamente.  
 Ahora toca el siguiente paso clave: **conectar nuestras máquinas al SIEM mediante los agentes**.
@@ -180,7 +180,7 @@ Tras ejecutar el comando, aparecerá la confirmación de instalación:
 ##### ✔️ **5. Arranca el servicio del agente**
 En PowerShell ejecuta: `NET START WazuhSvc`
 
-![agentes](powershell2.png)
+![agentes](img/powershell2.png)
 
 ### **¿Qué hace este comando realmente?**
 - **Descarga** el instalador oficial del agente Windows desde los repositorios de Wazuh.
