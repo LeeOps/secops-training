@@ -179,6 +179,7 @@ Si todo va bien, verás algo como:
 
 
  ![Sysmon](img/install2.png)
+ 
 ¡Todo listo!
 
 ---
@@ -299,5 +300,5 @@ Esto confirma que:
 
 ---
 
- ##### 👉 [Ir a Configuración de Reglas](../configuración/reglas/README.md)
+ ##### 👉 [Ir a Configuración de Reglas](../configuracion/reglas/README.md)
 
