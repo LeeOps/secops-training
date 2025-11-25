@@ -60,7 +60,7 @@ El laboratorio está diseñado para que ambos roles puedan estudiarse de forma c
 El entorno base está compuesto por:
 
 - Servidor Wazuh sobre Ubuntu Server (CLI)
-- Windows Server como sistema generador de eventos y agente del SIEM
+- Windows Pro como sistema generador de eventos y agente del SIEM
 - Kali Linux como equipo atacante
 
 # Configuración de red
@@ -78,24 +78,29 @@ Este diseño facilita la ejecución de ataques, la captura de eventos y el anál
 
 El contenido del laboratorio se organiza en bloques claros:
 ```
-training/
+Wazuh-Lab/
  ├── instalacion/
  │    ├── ubuntu/
  │    ├── wazuh/
  │    └── windows/
  │
  ├── configuracion/
- │    ├── wazuh/
- │    ├── windows/
- │    └── kali/
+ │    ├── agente/
+ │    ├── reglas/
  │
+ │── sysmon/
+ │      
  └── casos/
-      ├── caso01/
-      ├── caso02/
-      ├── caso03/
-      ├── caso04/
-      └── caso05/
+ │    ├── caso01/
+ │    ├── caso02/
+ |    ├── caso03/
+ │    ├── caso04/
+ │    ├── caso05/
+ |    ├── caso06/
+      └── caso07/
+
 ```
+
 Cada carpeta contiene documentación detallada, evidencias y pasos prácticos.
 
 # Evolución del proyecto
@@ -113,9 +118,6 @@ El propósito final es crear un entorno modular, escalable y apto para formació
 
 
 
-
-
-
 ## 📌 Estado actual del laboratorio
 
 - ✔ Ubuntu Server instalado y documentado  
@@ -123,17 +125,15 @@ El propósito final es crear un entorno modular, escalable y apto para formació
 - ✔ Certificados funcionales  
 - ✔ Dashboard accesible  
 - ✔ Estructura del repositorio creada  
-- ⏳ Windows Server en preparación  
+- ✔ Windows Pro Instalado
+- ✔ Sysmon Instalado  
 - ⏳ Kali Linux pendiente de configuración  
 - ⏳ Casos prácticos en desarrollo  
 
 ## 🚧 Próximamente
 
 Los siguientes módulos están en desarrollo y se publicarán a medida que se completen:
-
-- Instalación y configuración de Windows Server como agente
 - Primeros casos prácticos (Caso 01, Caso 02…)
-- Integración de Sysmon + detecciones en tiempo real
 - Escenarios iniciales Red Team
 - Alertas personalizadas en Wazuh
 
