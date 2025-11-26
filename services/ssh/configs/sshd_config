@@ -1,0 +1,43 @@
+# ---------------------------------------------
+# SSHD CONFIG — Versión vulnerable 
+# ---------------------------------------------
+
+# --- AUTENTICACIÓN ---
+# Permite login como root (inseguro, pero necesario para PoC)
+PermitRootLogin yes
+
+# Permite autenticación por contraseña (para fuerza bruta)
+PasswordAuthentication yes
+
+# Permitir PAM (requisito típico)
+UsePAM yes
+
+# No permitir contraseñas vacías (seguimos evitando el caos)
+PermitEmptyPasswords no
+
+# Incrementa el detalle de logs (necesario para detección con Wazuh)
+LogLevel VERBOSE
+
+
+# --- CONFIGURACIÓN GENERAL ---
+Port 22
+AddressFamily any
+ListenAddress 0.0.0.0
+ListenAddress ::
+
+# Mantener compatibilidad
+ChallengeResponseAuthentication no
+UseDNS no
+X11Forwarding no
+PrintMotd no
+
+# Variables de entorno permitidas
+AcceptEnv LANG LC_*
+
+# SFTP (por defecto)
+Subsystem sftp /usr/lib/openssh/sftp-server
+
+# Claves por defecto del sistema
+HostKey /etc/ssh/ssh_host_rsa_key
+HostKey /etc/ssh/ssh_host_ecdsa_key
+HostKey /etc/ssh/ssh_host_ed25519_key
