@@ -1,0 +1,42 @@
+<group name="ssh,authentication,bruteforce,">
+    
+    <!-- 1. Detección básica: contraseña fallida -->
+    <rule id="80000" level="3">
+        <program_name>sshd</program_name>
+        <match>Failed password</match>
+        <description>SSH: Intento de contraseña fallido</description>
+        <group>ssh,authentication_failed,</group>
+    </rule>
+
+    <!-- 2. Frecuencia: múltiples fallos en poco tiempo -->
+    <rule id="80001" level="7" frequency="5" timeframe="60">
+        <if_matched_sid>80000</if_matched_sid>
+        <description>SSH: Múltiples fallos de autenticación (posible fuerza bruta)</description>
+        <group>ssh,bruteforce,attack,</group>
+    </rule>
+
+    <!-- 3. Misma IP insistente (Hydra vibes) -->
+    <rule id="80002" level="10" frequency="10" timeframe="120">
+        <if_matched_sid>80000</if_matched_sid>
+        <same_source_ip />
+        <description>SSH: Fuerza bruta desde la misma IP</description>
+        <group>ssh,bruteforce,attack,critical,</group>
+    </rule>
+
+    <!-- 4. Jackpot: éxito tras varios fallos -->
+    <rule id="80003" level="12">
+        <if_matched_sid>80000</if_matched_sid>
+        <match>Accepted password</match>
+        <description>SSH: Acceso conseguido tras múltiples fallos (compromiso claro)</description>
+        <group>ssh,authentication,bruteforce,attack,critical,</group>
+    </rule>
+
+    <!-- 5.  Login de root: por si no fuera suficiente drama -->
+    <rule id="80004" level="8">
+        <program_name>sshd</program_name>
+        <match>Accepted password for root</match>
+        <description>SSH: Login exitoso como root</description>
+        <group>ssh,root_access,authentication,</group>
+    </rule>
+
+</group>
