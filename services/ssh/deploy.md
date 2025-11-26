@@ -11,7 +11,7 @@ sudo apt update
 sudo apt install openssh-server -y
 ```
 
-![ssh](install_ssh.png)
+![ssh](img/install_ssh.png)
 
 Comprobar que el servicio está activo:
 `sudo service ssh status`
