@@ -1,66 +1,80 @@
 <group name="ftp,vsftpd,authentication,access">
 
-    <!-- Intentos fallidos -->
-    <rule id="83000" level="3">
+    <!-- ========================= -->
+    <!--  FTP: Intentos fallidos   -->
+    <!-- ========================= -->
+    <rule id="83050" level="3">
         <field name="program">vsftpd</field>
         <match>FAIL LOGIN</match>
         <description>FTP: Intento de login fallido.</description>
     </rule>
 
-    <!-- Bruteforce (fallos repetidos) -->
-    <rule id="83001" level="7" frequency="5" timeframe="30">
-        <if_sid>83000</if_sid>
+    <!-- Agrupación de fallos repetidos (bruteforce básica) -->
+    <rule id="83051" level="7" frequency="5" timeframe="30">
+        <if_sid>83050</if_sid>
         <same_source_ip />
-        <description>FTP: Posible fuerza bruta.</description>
+        <description>FTP: Posible ataque de fuerza bruta (múltiples fallos).</description>
     </rule>
 
-    <!-- Login correcto -->
-    <rule id="83010" level="3">
+
+    <!-- ========================= -->
+    <!--  FTP: Logins exitosos     -->
+    <!-- ========================= -->
+    <rule id="83052" level="3">
         <field name="program">vsftpd</field>
         <match>LOGIN OK</match>
-        <description>FTP: Login exitoso.</description>
+        <description>FTP: Login FTP exitoso.</description>
     </rule>
 
-    <!-- Login correcto tras bruteforce -->
-    <rule id="83011" level="10">
-        <if_sid>83001</if_sid>
+    <!-- Login exitoso después de varios fallos -->
+    <rule id="83053" level="10">
+        <if_sid>83051</if_sid>
         <match>LOGIN OK</match>
-        <description>FTP: Login exitoso tras intentos fallidos.</description>
+        <description>FTP: Login exitoso tras múltiples intentos fallidos.</description>
     </rule>
 
-    <!-- Subida de archivos -->
-    <rule id="83020" level="5">
+
+    <!-- ========================= -->
+    <!--  FTP: Subida de archivos  -->
+    <!-- ========================= -->
+    <rule id="83054" level="5">
         <field name="program">vsftpd</field>
         <match>UPLOAD:</match>
         <description>FTP: Archivo subido al servidor.</description>
     </rule>
 
-    <!-- Subida de archivos sospechosos -->
-    <rule id="83021" level="8">
-        <if_sid>83020</if_sid>
+    <!-- Subida de archivo ejecutable o sospechoso -->
+    <rule id="83055" level="8">
+        <if_sid>83054</if_sid>
         <regex>\.sh$|\.php$|\.py$|\.exe$|\.bat$|\.pl$|\.cgi$</regex>
         <description>FTP: Subida de archivo potencialmente malicioso.</description>
     </rule>
 
-    <!-- Descarga de archivos -->
-    <rule id="83030" level="3">
+
+    <!-- ========================= -->
+    <!--  FTP: Descarga de archivos -->
+    <!-- ========================= -->
+    <rule id="83056" level="3">
         <field name="program">vsftpd</field>
         <match>DOWNLOAD:</match>
-        <description>FTP: Archivo descargado.</description>
+        <description>FTP: Archivo descargado desde el servidor.</description>
     </rule>
 
-    <!-- Eliminaciones -->
-    <rule id="83040" level="6">
+
+    <!-- ========================= -->
+    <!--  FTP: Eliminación de archivos -->
+    <!-- ========================= -->
+    <rule id="83057" level="6">
         <field name="program">vsftpd</field>
         <match>DELE</match>
-        <description>FTP: Eliminación de archivos.</description>
+        <description>FTP: Eliminación de archivos detectada.</description>
     </rule>
 
-    <!-- Eliminaciones masivas -->
-    <rule id="83041" level="7" frequency="5" timeframe="30">
-        <if_sid>83040</if_sid>
+    <!-- Eliminación masiva de archivos -->
+    <rule id="83058" level="7" frequency="5" timeframe="30">
+        <if_sid>83057</if_sid>
         <same_source_ip />
-        <description>FTP: Eliminación masiva de archivos.</description>
+        <description>FTP: Eliminación masiva de archivos (actividad sospechosa).</description>
     </rule>
 
 </group>
