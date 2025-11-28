@@ -1,5 +1,10 @@
 # Detección de FTP Vulnerable en Wazuh
 
+**Este laboratorio usa una configuración FTP muy realista… tan realista que todavía se encuentra en demasiadas empresas.**  
+Es la típica instalación donde el servidor funciona, los archivos suben, nadie toca TLS “porque total, está en la intranet”, y todo el mundo confía ciegamente en el firewall como si fuera Gandalf en la muralla: _“¡no pasarán!”_
+
+Perfecto para practicar.
+
 ---
 ## ¿Por qué vigilar FTP en pleno 2025?
 ---
@@ -60,13 +65,14 @@ Una configuración que convierte tu servidor FTP en:
 
 Contiene :
 
-- `anonymous_enable=YES` → que entre cualquiera, total…
-- `write_enable=YES` → para que puedan **subir ficheros**
-- `anon_upload_enable=YES` → aún mejor: ¡que los suba el usuario anónimo!
-- `anon_mkdir_write_enable=YES` → y que cree carpetas si quiere
-- `local_enable=YES` → acceso para usuarios del sistema
-- `file_open_mode=0777` → permisos tipo “barra libre”
-- `listen=YES` → para que escuche en todas las interfaces
+- Sniffing
+- MITM
+- Credential harvesting
+- Fuerza bruta
+- DoS en conexiones PASV
+- Reconocimiento y fingerprinting
+- Acceso no autorizado por contraseñas débiles
+- Interceptación y modificación de archivos
 
 ---
 ### ✔️ `deploy.md`
@@ -88,4 +94,3 @@ Guía detallada donde explico:
 No se te ocurra configurar así un servicio ftp en producción.
 
 ---
-
