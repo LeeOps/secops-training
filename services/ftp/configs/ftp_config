@@ -1,47 +1,42 @@
-# ---------------------------------------------
-# FTP CONFIG — Versión vulnerable 
-# ---------------------------------------------
+# -------------------------------------------------------------
+# vsftpd.conf — Configuración funcional mínima para entorno interno
+# -------------------------------------------------------------
 
-# --- Básico del servicio ---
-listen=YES
-listen_ipv6=NO
-anonymous_enable=YES
+# Escucha en IPv6 (comportamiento por defecto en varias distros)
+listen=NO
+listen_ipv6=YES
+
+# Desactivar acceso anónimo
+anonymous_enable=NO
+
+# Habilitar acceso de usuarios locales
 local_enable=YES
+
+# Permitir operaciones de escritura
 write_enable=YES
 
-# Permisos totalmente abiertos (barra libre)
-anon_upload_enable=YES
-anon_mkdir_write_enable=YES
-anon_other_write_enable=YES
-local_umask=000
-anon_umask=000
-file_open_mode=0777
-
-# Que los usuarios locales también puedan hacer cosas
-chroot_local_user=NO
-allow_writeable_chroot=YES
-
-# Mensajes y logs (para que Wazuh vea TODO)
+# Mensajes al entrar en directorios
 dirmessage_enable=YES
+
+# Registro de actividad
 use_localtime=YES
 xferlog_enable=YES
-xferlog_std_format=NO
-log_ftp_protocol=YES
 vsftpd_log_file=/var/log/vsftpd.log
 
-# Conexiones y puertos
+# Puerto de datos clásico de FTP
 connect_from_port_20=YES
-pasv_enable=YES
-pasv_min_port=21000
-pasv_max_port=21010
 
-# Seguridad totalmente relajada
+# Permisos por defecto al crear archivos
+local_umask=022
+
+# Confinar a los usuarios en su directorio personal
+chroot_local_user=YES
+
+# Desactivar TLS (solo para entornos controlados)
+ssl_enable=NO
+
+# No usar listas de usuarios
 userlist_enable=NO
-tcp_wrappers=NO
 
-# Para hacerlo todavía más divertido:
-# - No pedimos password “seria” al anónimo
-no_anon_password=YES
-
-# Banner opcional 
-ftpd_banner=Bienvenido a FTP inseguro. Disfruta de tus shells
+# Servicio PAM por defecto
+pam_service_name=vsftpd
