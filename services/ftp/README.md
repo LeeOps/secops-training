@@ -32,15 +32,6 @@ Nuestro archivo de reglas hará que Wazuh diga cosas como:
 
 Vamos, lo que un SIEM decente debería haber hecho siempre.
 
-
----
-## Requisitos
----
-
-- FTP instalado (te recomiendo **vsftpd**, lo ponemos vulnerable ahora).
-- Logs visibles en:  `/var/log/vsftpd.log`
-- Wazuh Manager funcionando
-
 ---
 ## Estructura del servicio
 ---
