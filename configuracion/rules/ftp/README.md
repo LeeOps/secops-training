@@ -38,16 +38,12 @@ Esto deja las reglas ya cargadas en el Manager.
 
 Sí, esta configuración debe añadirse ahora en el mismo archivo que configuramos anteriormente, en la sección de Servicios.
 
-¿Y por qué no estaba incluida antes?
-
-> Porque esta parte _no forma parte de la configuración vulnerable del servicio_, sino de la **integración con Wazuh** para que el SIEM pueda leer los logs.  
-> 
-> La configuración vulnerable la dejamos “realista”, y la parte de logging solo se activa cuando necesitamos que Wazuh analice la actividad del FTP.
+“Log completo de todo lo que el usuario hace dentro del FTP”
 
 En `/etc/vsftpd.conf` añade o deja así: 
 
 ```
-xferlog_enable=YES log_ftp_protocol=YES vsftpd_log_file=/var/log/vsftpd.log
+log_ftp_protocol=YES 
 ```
 
 ![Reglas ftp](img/logs_detallados.png)
