@@ -1,0 +1,87 @@
+<group name="ftp,vsftpd,authentication,access,">
+    
+    <!-- ========================= -->
+    <!--  FTP: Intentos fallidos   -->
+    <!-- ========================= -->
+    <rule id="82000" level="3">
+        <decoded_as>syslog</decoded_as>
+        <if_sid>5710</if_sid>
+        <field name="program">vsftpd</field>
+        <match>FAIL LOGIN</match>
+        <description>FTP: Intento de login fallido.</description>
+    </rule>
+
+    <!-- Agrupación de fallos repetidos (bruteforce básica) -->
+    <rule id="82001" level="7" frequency="5" timeframe="30">
+        <if_sid>82000</if_sid>
+        <same_source_ip />
+        <description>FTP: Posible ataque de fuerza bruta (múltiples fallos).</description>
+    </rule>
+
+
+    <!-- ========================= -->
+    <!--  FTP: Logins exitosos     -->
+    <!-- ========================= -->
+    <rule id="82010" level="3">
+        <decoded_as>syslog</decoded_as>
+        <field name="program">vsftpd</field>
+        <match>LOGIN OK</match>
+        <description>FTP: Login exitoso.</description>
+    </rule>
+
+    <!-- Login exitoso después de varios fallos -->
+    <rule id="82011" level="10">
+        <if_sid>82001</if_sid>
+        <match>LOGIN OK</match>
+        <description>FTP: Login exitoso después de intentos fallidos. Actividad sospechosa.</description>
+    </rule>
+
+
+    <!-- ========================= -->
+    <!--  FTP: Subida de archivos  -->
+    <!-- ========================= -->
+    <rule id="82020" level="5">
+        <decoded_as>syslog</decoded_as>
+        <field name="program">vsftpd</field>
+        <match>UPLOAD:</match>
+        <description>FTP: Archivo subido al servidor.</description>
+    </rule>
+
+    <!-- Subida de archivo ejecutable o sospechoso -->
+    <rule id="82021" level="8">
+        <if_sid>82020</if_sid>
+        <regex>\.sh$|\.php$|\.py$|\.exe$|\.bat$|\.pl$|\.cgi$</regex>
+        <description>FTP: Subida de archivo potencialmente malicioso.</description>
+    </rule>
+
+
+    <!-- ========================= -->
+    <!--  FTP: Descarga de archivos -->
+    <!-- ========================= -->
+    <rule id="82030" level="3">
+        <decoded_as>syslog</decoded_as>
+        <field name="program">vsftpd</field>
+        <match>DOWNLOAD:</match>
+        <description>FTP: Archivo descargado desde el servidor.</description>
+    </rule>
+
+
+    <!-- ========================= -->
+    <!--  FTP: Actividad anómala   -->
+    <!-- ========================= -->
+    <rule id="82040" level="6">
+        <decoded_as>syslog</decoded_as>
+        <field name="program">vsftpd</field>
+        <match>DELE</match>
+        <description>FTP: Eliminación de archivos detectada.</description>
+    </rule>
+
+    <rule id="82041" level="7">
+        <if_sid>82040</if_sid>
+        <frequency>5</frequency>
+        <timeframe>30</timeframe>
+        <same_source_ip />
+        <description>FTP: Eliminación masiva de archivos (actividad sospechosa).</description>
+    </rule>
+
+</group>
