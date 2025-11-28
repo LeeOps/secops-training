@@ -11,7 +11,7 @@
 
     <!-- Agrupación de fallos repetidos (bruteforce básica) -->
     <rule id="83051" level="7" frequency="5" timeframe="30">
-        <if_sid>83050</if_sid>
+        <if_matched_sid>83050</if_matched_sid>
         <same_source_ip />
         <description>FTP: Posible ataque de fuerza bruta (múltiples fallos).</description>
     </rule>
@@ -72,7 +72,7 @@
 
     <!-- Eliminación masiva de archivos -->
     <rule id="83058" level="7" frequency="5" timeframe="30">
-        <if_sid>83057</if_sid>
+        <if_matched_sid>83057</if_matched_sid>
         <same_source_ip />
         <description>FTP: Eliminación masiva de archivos (actividad sospechosa).</description>
     </rule>
