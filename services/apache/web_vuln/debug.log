@@ -1,0 +1,3 @@
+[DEBUG] Connection failed to DB.
+[DEBUG] User admin attempted login with pass "1234".
+[DEBUG] Testing API endpoint /api/v1/login?user=admin&pass=1234
