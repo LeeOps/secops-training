@@ -89,9 +89,11 @@ Por defecto viene así:
 ![Apache](img/default.png)
 
 Y hay que dejarlo así:
+
 ![Apache](img/default2.png)
  
  y además incluir lo siguiente:
+ 
 ![Apache](img/conf.png)
 
 Cosas claves que hemos hecho:
@@ -114,6 +116,7 @@ sudo chmod -R 777 /var/www/html
 ```
 
 ![Apache](img/carpetas.png)
+
 **Explicación rápida:**
 
 - `/uploads` → típica carpeta de subida de ficheros de cualquier web.
@@ -159,11 +162,13 @@ sudo apache2ctl configtest
 
 Debe mostrar: `Syntax OK`.
 
- Si te sale el siguiente mensaje, puedes hacer 2 cosas
+ Si te sale el siguiente mensaje, puedes hacer 2 cosas:
+ 
  1-Dejarlo así, no afecta al laboratorio, te está diciendo:
  “_No sé qué nombre de servidor usar (FQDN).  Voy a usar 127.0.1.1 por defecto._”
  
 ![Apache](img/ok.png)
+
 2-Si quieres dejarlo limpio, escribe esto en el archivo de configuración (`000-default.conf`)
 
 ```
