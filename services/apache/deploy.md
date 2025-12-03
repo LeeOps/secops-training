@@ -19,7 +19,7 @@ sudo apt install apache2 -y
 
 Cuando ejecutas eso, pasa una cosa curiosa:
 
- **Instalas Apache → APT aprovecha para actualizar dependencias del sistema → Ubuntu detecta cosas pendientes → te enseña pantallas raras.**
+> **Instalas Apache → APT aprovecha para actualizar dependencias del sistema → Ubuntu detecta cosas pendientes → te enseña pantallas raras.**
 
 **Importante:**  
  - NO son pantallas de Apache.
@@ -78,7 +78,7 @@ Si te sale activo: ¡Listo!
  
  #### 1. Activar Directory Listing 
  Permite navegar por carpetas como si fuera un FTP.   Ideal para que un atacante vea archivos internos y para generar logs interesantes.  
- 
+
 Editar:
 ```
 sudo nano /etc/apache2/sites-available/000-default.conf
@@ -96,6 +96,18 @@ Y hay que dejarlo así:
  
 ![Apache](img/conf.png)
 
+Pero si prefieres, en vez de hacerlo a mano, copiarlo del repositorio, sigue estos pasos:
+
+```
+git clone https://github.com/LeeOps/secops-training.git
+cd secops-training
+
+
+sudo cp services/apache/configs/000-default.conf /etc/apache2/sites-available/000-default.conf
+
+
+```
+
 Cosas claves que hemos hecho:
 
 - `Options Indexes` → **directory listing** activado.
@@ -103,7 +115,6 @@ Cosas claves que hemos hecho:
 - `uploads` ejecuta `.php` y `.sh`.
 - Logs se guardan dentro de `/var/www/html/logs` (luego los exponemos).
 
-Guarda el archivo y sal de nano.
 
 #### 2. Crear carpetas y poner permisos curiosos
 
@@ -162,21 +173,6 @@ sudo apache2ctl configtest
 
 Debe mostrar: `Syntax OK`.
 
- Si te sale el siguiente mensaje, puedes hacer 2 cosas:
- 
- 1-Dejarlo así, no afecta al laboratorio, te está diciendo:
- “_No sé qué nombre de servidor usar (FQDN).  Voy a usar 127.0.1.1 por defecto._”
- 
-![Apache](img/ok.png)
-
-2-Si quieres dejarlo limpio, escribe esto en el archivo de configuración (`000-default.conf`)
-
-```
-ServerName 127.0.0.1
-```
-
-y te saldrá limpio:
-
 ![Apache](img/conf2.png)
 
 Aplicamos cambios:
@@ -205,5 +201,121 @@ Con estos cambios hemos conseguido que:
 - Los permisos 777 permitan modificaciones “alegres” en toda la web.
 
 Todo esto es **realista** (se ve en webs mal mantenidas) y genera eventos perfectos para que **Wazuh y el SIEM** los detecten y tú puedas analizarlos.
+
+---
+## 4. Estructura de la web vulnerable
+---
+En la ruta `services/apache/web_vuln/html/` se encuentra la web insegura que se desplegará sobre Apache.  
+Esta estructura imita fallos reales encontrados en webs mal configuradas:
+
+services/apache/web_vuln/html/
+├── index.html
+├── site.php
+├── phpinfo.php
+├── debug.log
+├── backup_2023.txt
+├── uploads/        ← carpeta vacía
+└── logs/              ← carpeta vacía
+
+Para copiar la web al servidor y dejarla *alegremente insegura*, utiliza:
+
+```
+sudo cp -r services/apache/web_vuln/html/* /var/www/html/
+sudo chmod -R 777 /var/www/html
+```
+
+Esto:
+
+- Copia todos los archivos y carpetas vulnerables
+- Deja la web con permisos 777 (realista y útil para SIEM)
+- Activa directorios navegables y ejecución de scripts peligrosos
+- Expone logs al navegador para análisis
+
+![Apache](img/web_vuln.png)
+
+---
+## 5. Instalar PHP + módulo APACHE
+---
+#### ¿Por qué hay que instalar PHP?
+
+La web vulnerable de este laboratorio usa archivos `.php` para simular fallos reales: subida insegura de archivos, ejecución de código, phpinfo expuesto, etc.
+
+Si PHP no está instalado, Apache **no ejecuta nada**: muestra el código como texto y el laboratorio pierde sentido.  
+Con PHP activado:
+
+- los `.php` se ejecutan
+- puedes subir webshells
+- se generan errores y logs reales
+- Wazuh detecta actividad sospechosa
+
+Instalación mínima:
+
+```
+sudo apt install php libapache2-mod-php -y
+```
+
+Esto instala:
+
+- PHP
+- el módulo para que Apache entienda PHP
+- dependencias necesarias
+
+Después reinicia Apache:
+
+```
+sudo systemctl restart apache2
+```
+
+---
+## 6. Comprobamos
+---
+### 1. Validar que `uploads/` y `logs/` existen y son navegables
+
+En el navegador visita:
+
+- `http://TU-IP/uploads/`
+
+![Apache](img/comp1.png)
+
+- `http://TU-IP/logs/`
+
+![Apache](img/comp2.png)
+
+
+### 2. Probar que `phpinfo.php` está accesible
+
+#### Aqui explicar pq hay que instalar php
+Navega a:
+
+`http://TU-IP/phpinfo.php`
+
+Si ves la configuración interna de PHP → perfecto.  
+(Esto jamás debería estar accesible en producción.)
+
+![Apache](img/phpinfo1.png)
+
+
+### 3. Confirmar que los logs se están escribiendo y son visibles
+
+Visita:
+
+```
+http://TU-IP/logs/error.log 
+http://TU-IP/logs/access.log
+```
+
+Refresca un par de veces la web y deberías ver nuevas líneas en el log.
+
+Esto permite que Wazuh detecte:
+
+- modificaciones constantes
+- accesos
+- ejecuciones
+- escritura en archivos sensibles
+
+---
+> 🛑 **Hemos terminado.**  
+> Y por favor: no hagáis esto jamás en una web real…  
+> a menos que queráis convertir vuestro servidor en un buffet libre para medio Internet.
 
 ---
