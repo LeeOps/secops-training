@@ -26,10 +26,13 @@ Este entorno sirve para entrenar y observar:
 
 ```
 services/apache/ 
-├── README.md       ← Esto que estás leyendo 
-├── deploy.md       ← Cómo montar el apache vulnerable sin morir en el intento 
-└── configs/       
-└── apache_config   ← Archivo de configuraciones
+    ├── README.md       ← Esto que estás leyendo 
+    ├── deploy.md       ← Cómo montar el apache vulnerable sin morir en el intento 
+    |── configs/       
+    |         └── 000-default.conf   ← Archivo de configuraciones
+    ├──  web_vuln/
+                 └──upload.php
+
 ```
 
 ---
