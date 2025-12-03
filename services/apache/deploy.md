@@ -231,7 +231,7 @@ Esto:
 - Activa directorios navegables y ejecución de scripts peligrosos
 - Expone logs al navegador para análisis
 
-![Apache](img/web_vuln.png)
+![Apache](img/web_vuln.PNG)
 
 ---
 ## 5. Instalar PHP + módulo APACHE
@@ -275,11 +275,11 @@ En el navegador visita:
 
 - `http://TU-IP/uploads/`
 
-![Apache](img/comp1.png)
+![Apache](img/comp1.PNG)
 
 - `http://TU-IP/logs/`
 
-![Apache](img/comp2.png)
+![Apache](img/comp2.PNG)
 
 
 ### 2. Probar que `phpinfo.php` está accesible
@@ -292,7 +292,7 @@ Navega a:
 Si ves la configuración interna de PHP → perfecto.  
 (Esto jamás debería estar accesible en producción.)
 
-![Apache](img/phpinfo1.png)
+![Apache](img/phpinfo.PNG)
 
 
 ### 3. Confirmar que los logs se están escribiendo y son visibles
