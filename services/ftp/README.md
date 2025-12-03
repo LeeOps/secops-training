@@ -40,9 +40,9 @@ Vamos, lo que un SIEM decente debería haber hecho siempre.
 
 services/ftp/ 
 ├── README.md       ← Esto que estás leyendo 
-├── deploy.md       ← Cómo montar el SSH vulnerable sin morir en el intento 
+├── deploy.md       ← Cómo montar el FTP vulnerable sin morir en el intento 
 └── configs/       
-└── ftp_config     ← El archivo REAL que activa el modo "pégame por favor"
+└── ftp_config     ← El archivo de configuración.
 ```
 
 ---
