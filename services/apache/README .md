@@ -31,7 +31,12 @@ services/apache/
     |── configs/       
     |         └── 000-default.conf   ← Archivo de configuraciones
     ├──  web_vuln/
-                 └──upload.php
+                 └── upload.php
+                 └── backup_2023.txt
+                 └── index.html
+                 └── phpinfo.php
+                 └── site.php
+
 
 ```
 
