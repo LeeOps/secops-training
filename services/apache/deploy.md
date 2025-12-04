@@ -207,7 +207,7 @@ Todo esto es **realista** (se ve en webs mal mantenidas) y genera eventos perfec
 ---
 En la ruta `services/apache/web_vuln/html/` se encuentra la web insegura que se desplegará sobre Apache.  
 Esta estructura imita fallos reales encontrados en webs mal configuradas:
-
+```
 services/apache/web_vuln/html/
 ├── index.html
 ├── site.php
@@ -216,11 +216,12 @@ services/apache/web_vuln/html/
 ├── backup_2023.txt
 ├── uploads/        ← carpeta vacía
 └── logs/              ← carpeta vacía
+```
 
 Para copiar la web al servidor y dejarla *alegremente insegura*, utiliza:
 
 ```
-sudo cp -r services/apache/web_vuln/html/* /var/www/html/
+sudo cp -r services/apache/web_vuln/* /var/www/html/
 sudo chmod -R 777 /var/www/html
 ```
 
