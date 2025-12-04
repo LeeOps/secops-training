@@ -1,0 +1,71 @@
+<group name="apache_vuln,apache,web">
+
+    <!-- 100100 – Acceso a phpinfo.php -->
+    <rule id="100100" level="5">
+        <if_group>apache</if_group>
+        <match>phpinfo.php</match>
+        <description>Apache vuln lab: acceso a phpinfo.php expuesto</description>
+        <group>apache_vuln,exposure,phpinfo</group>
+    </rule>
+
+    <!-- 100101 – Acceso al formulario de subida inseguro -->
+    <rule id="100101" level="7">
+        <if_group>apache</if_group>
+        <match>upload.php</match>
+        <description>Apache vuln lab: acceso a upload.php (subida insegura)</description>
+        <group>apache_vuln,upload,insecure</group>
+    </rule>
+
+    <!-- 100102 – Acceso a /uploads/ (zona ejecutable) -->
+    <rule id="100102" level="8">
+        <if_group>apache</if_group>
+        <match>/uploads/</match>
+        <description>Apache vuln lab: acceso directo a /uploads/ (posible RCE)</description>
+        <group>apache_vuln,uploads,rce</group>
+    </rule>
+
+    <!-- 100103 – Acceso a logs expuestos por web -->
+    <rule id="100103" level="8">
+        <if_group>apache</if_group>
+        <match>/logs/</match>
+        <description>Apache vuln lab: acceso a /logs/ expuestos</description>
+        <group>apache_vuln,logs,exposure</group>
+    </rule>
+
+    <!-- 100104 – Acceso a backup_2023.txt (fuga de info) -->
+    <rule id="100104" level="9">
+        <if_group>apache</if_group>
+        <match>backup_2023.txt</match>
+        <description>Apache vuln lab: acceso a backup_2023.txt (posible fuga de datos)</description>
+        <group>apache_vuln,backup,info_leak</group>
+    </rule>
+
+    <!-- 100105 – Muchos errores 500 desde la misma IP (ataque / explotación) -->
+    <rule id="100105" level="7">
+        <if_group>apache</if_group>
+        <match> 500 </match>
+        <description>Apache vuln lab: error 500 en respuesta HTTP</description>
+        <frequency>5</frequency>
+        <timeframe>60</timeframe>
+        <same_source_ip/>
+        <group>apache_vuln,http_error,bruteforce,exploitation</group>
+    </rule>
+
+    <!-- 100106 – Ejecución de .php dentro de /uploads/ con respuesta 200 -->
+    <rule id="100106" level="10">
+        <if_group>apache</if_group>
+        <regex>\"GET /uploads/.*\.php HTTP/1\.[01]\" 200</regex>
+        <description>Apache vuln lab: ejecución de .php en /uploads/ con 200 OK (posible webshell)</description>
+        <group>apache_vuln,rce,webshell</group>
+    </rule>
+
+    <!-- 100107 – Lectura de logs de Apache por HTTP -->
+    <rule id="100107" level="9">
+        <if_group>apache</if_group>
+        <regex>/logs/(access\.log|error\.log)</regex>
+        <description>Apache vuln lab: acceso a ficheros de log de Apache vía HTTP</description>
+        <group>apache_vuln,logs,info_leak</group>
+    </rule>
+
+</group>
+
