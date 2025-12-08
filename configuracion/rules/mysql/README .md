@@ -53,6 +53,7 @@ sudo cp configuracion/rules/mysql/mysql.xml /var/ossec/etc/rules
 
 Si lo pones en otro sitio, Wazuh hará lo que mejor sabe:  
 **ignorar tus ilusiones**.
+
 ![Reglas mysql](img/rules.png)
 
 Y ya estaría
