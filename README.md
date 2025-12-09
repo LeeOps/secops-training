@@ -12,130 +12,248 @@
 ```
 
 </div>
+
+
                                         
 ⚠️ Estado del proyecto
 
-Este laboratorio se encuentra en desarrollo activo.
-Las guías de instalación, configuración, ataques controlados y detección se irán incorporando progresivamente a medida que se finalicen las pruebas y validaciones.
-El contenido crecerá de forma continua a medida que se completen las máquinas y los casos prácticos.
+El laboratorio se encuentra en desarrollo activo, pero la base funcional YA está completada.  
+Los módulos restantes (Kali Linux y los casos prácticos avanzados) se irán añadiendo conforme se terminen las pruebas y validaciones finales.
 
+---
 # Descripción general
+---
 
-Este repositorio no es una guía rápida ni un listado de comandos sin contexto.
-El objetivo es construir un entorno completo de Seguridad Operacional (SecOps) donde se documenta:
+Este repositorio no es una guía rápida ni un listado de comandos sueltos.
 
-- qué ocurre internamente en cada sistema
-- por qué sucede
-- cómo se generan y procesan los eventos
-- cómo se detectan y analizan
-- cómo se responde y se mitiga
+El objetivo es construir un entorno **completo de Seguridad Operacional (SecOps)** donde se documenta:
 
-Todo ello dentro de un entorno aislado, seguro y reproducible, pensado para entrenar habilidades tanto ofensivas como defensivas de forma realista.
+- qué ocurre internamente en cada sistema  
+- por qué sucede  
+- cómo se generan y procesan los eventos  
+- cómo se detectan y analizan  
+- cómo se responde y se mitiga  
 
+Todo dentro de un laboratorio seguro, aislado y totalmente reproducible, pensado para entrenamiento realista tanto **Blue Team** como **Red Team**.
+
+---
 # Enfoque del laboratorio
-🟦 Blue Team
+---
 
-- Análisis de logs y eventos
-- Validación de reglas y alertas
-- Investigación en el Dashboard
-- Prácticas de detección de integridad
-- Respuesta ante incidentes reales
+### 🟦 Blue Team
+- Análisis de logs y eventos  
+- Validación de reglas y alertas  
+- Investigación en Dashboard  
+- Integridad del sistema  
+- Respuesta ante incidentes  
+- Detección de técnicas MITRE  
 
-🔴 Red Team (controlado)
+### 🔴 Red Team (controlado)
+- Ejecución técnica de ataques  
+- Generación intencionada de eventos  
+- Pruebas de persistencia y movimiento lateral  
+- Kerberoasting, AS-REP, RDP abuse, etc.  
+- Evaluación de detecciones y evasión
 
-- Ejecución de técnicas MITRE
-- Generación de eventos intencionados
-- Pruebas de persistencia y movimiento lateral
-- Observación del rastro que deja cada técnica
-- Evaluación de detecciones frente a evasión
-
+---
 # Ciclo completo
+---
 
 ataque → evento → alerta → análisis → respuesta → mitigación
 
 El laboratorio está diseñado para que ambos roles puedan estudiarse de forma conjunta.
 
+---
 # Arquitectura prevista
+---
 
-El entorno base está compuesto por:
+El laboratorio completo incluye:
 
-- Servidor Wazuh sobre Ubuntu Server (CLI)
-- Windows Pro como sistema generador de eventos y agente del SIEM
-- Kali Linux como equipo atacante
+### 🟩 1. Servidor Wazuh sobre Ubuntu Server (CLI)
+- Consola  
+- Indexer  
+- Dashboard  
+- Certificados  
+- Reglas personalizadas  
+- Recepción de agentes Linux y Windows  
 
-# Configuración de red
+### 🟦 2. Windows Pro (cliente generador de eventos)
+- Sysmon  
+- Wazuh Agent  
+- Eventos de usuario, procesos y red  
+- Integración con AD (opcional)
 
-Toda la infraestructura funciona en NAT, lo que permite:
+Uso Windows 10 Pro como primera máquina Windows del laboratorio porque consume menos recursos y permite generar telemetría completa (Sysmon, Wazuh Agent y eventos ETW).
 
-- mantener el laboratorio aislado
-- evitar exponer servicios
-- reproducir escenarios controlados
-- garantizar que las máquinas se ven entre sí sin afectar a la red real
+La telemetría funciona igual en Pro y en Server, por lo que cualquiera puede usar Windows Server si lo prefiere.
 
-Este diseño facilita la ejecución de ataques, la captura de eventos y el análisis de detecciones sin riesgos.
+> ### >>>> Nota sobre la versión de Windows utilizada <<<<
+> Este laboratorio utiliza inicialmente Windows Pro por simplicidad, pero el entorno es **totalmente compatible con Windows Server 2019/2022**.
 
-📁 Estructura del repositorio
+> Si quieres ampliar el laboratorio a un entorno corporativo realista, puedes añadir:
+
+>  - Active Directory Domain Services  
+>  - DNS interno  
+>  - Kerberos  
+>  - Usuarios, grupos y OUs  
+>  - GPOs  
+>  - File Server (SMB nativo)  
+>  - Print Server  
+>  - Sysmon + Wazuh Agent  
+
+Más adelante se añadirá una sección dedicada a la ampliación con Active Directory.
+
+>>>>> La carpeta `instalacion/windows-ad/` se creará cuando comience la documentación del módulo AD (instalación de AD DS, dominio, OUs, usuarios, GPOs y unión de equipos).
+
+Por ahora, la integración con AD está planificada como ampliación opcional del laboratorio.
+
+
+### 🟪 3. Kali Linux (equipo atacante)
+⏳ *Pendiente de configuración final*  
+
+Será la máquina destinada a ejecutar:
+- Recon  
+- Explotación controlada  
+- Movimiento lateral  
+- Técnicas MITRE  
+- Ataques a AD
+  
+Esto permitirá escalar el proyecto a un entorno corporativo realista donde entrenar:
+
+- Kerberoasting  
+- AS-REP Roasting  
+- Enumeración de dominio  
+- Movimientos laterales  
+- Abuso de permisos  
+- Detecciones avanzadas en el SIEM
+  
+### 🟧 4. Configuración de red
+Toda la infraestructura corre en **NAT**, lo que garantiza:
+
+- Aislamiento completo  
+- Seguridad  
+- Reproducción de escenarios  
+- Interconexión entre máquinas  
+- Ningún servicio expuesto a Internet  
+
+---
+#  Estructura del repositorio
+---
 
 El contenido del laboratorio se organiza en bloques claros:
 ```
-Wazuh-Lab/
- ├── instalacion/
- │    ├── ubuntu/
- │    ├── wazuh/
- │    └── windows/
- │
- ├── configuracion/
- │    ├── agente/
- │    ├── reglas/
- │
- │── sysmon/
- │      
- └── casos/
- │    ├── caso01/
- │    ├── caso02/
- |    ├── caso03/
- │    ├── caso04/
- │    ├── caso05/
- |    ├── caso06/
-      └── caso07/
-
+secops-training
+│
+├── cases
+│
+├── configuracion
+│   ├── agente
+│   │   ├── comprobaciones
+│   │   │   ├── img
+│   │   │   └── README.md
+│   │   ├── eliminacion
+│   │   │   ├── img
+│   │   │   └── README.md
+│   │   └── instalacion
+│   │       ├── img
+│   │       └── README.md
+│   │
+│   └── rules
+│       ├── apache
+│       │   ├── apache_vuln.xml
+│       │   └── README.md
+│       │
+│       ├── ftp
+│       │   ├── img
+│       │   ├── ftp-events.xml
+│       │   └── README.md
+│       │
+│       ├── mysql
+│       │   ├── img
+│       │   ├── mysql.xml
+│       │   └── README.md
+│       │
+│       └── ssh
+│           ├── img
+│           ├── README.md
+│           └── ssh-bruteforce.xml
+│
+├── instalacion
+│   ├── ubuntu
+│   │   ├── img
+│   │   └── README.md
+│   │
+│   ├── wazuh
+│   │   ├── img
+│   │   └── README.md
+│   │
+│   ├── windows
+│   │   ├── img
+│   │   └── README.md
+│   │
+│   └── windows-ad   < NUEVA SECCIÓN (recomendada)
+│       ├── img
+│       ├── ad-install.md
+│       ├── ad-users-gpos.md
+│       └── README.md
+│
+├── services
+│   ├── apache
+│   │   ├── configs
+│   │   │   └── 000-default.conf
+│   │   └── img
+│   │
+│   ├── ftp
+│   │   ├── configs
+│   │   │   └── ftp_config
+│   │   ├── img
+│   │   ├── deploy.md
+│   │   └── README.md
+│   │
+│   ├── mysql
+│   │   ├── configs
+│   │   │   └── backup.sql
+│   │   ├── img
+│   │   ├── deploy.md
+│   │   └── README.md   
+│   │
+│   └── ssh
+│       ├── configs
+│       ├── img
+│       ├── deploy.md
+│       └── README.md
+│
+├── sysmon
+│   ├── img
+│   └── README.md
+│
+└── README.md (general)
 ```
 
-Cada carpeta contiene documentación detallada, evidencias y pasos prácticos.
-
+---
 # Evolución del proyecto
+---
 
-El laboratorio se ampliará con:
 
-- nuevos casos prácticos (ataque → detección → respuesta)
-- configuraciones avanzadas de Wazuh- 
-- técnicas MITRE adicionales
-- escenarios de movimiento lateral
-- hardening y mitigación
-- agentes adicionales (Linux y Windows)
+El laboratorio continúa ampliándose con:
+
+- Nuevos casos prácticos (ataque → detección → respuesta)  
+- Integración total de Windows Server + AD  
+- Técnicas MITRE adicionales  
+- Escenarios de movimiento lateral  
+- Hardening avanzado  
+- Más agentes Linux/Windows  
+- Escenarios Red Team completos  
 
 El propósito final es crear un entorno modular, escalable y apto para formación continua.
 
+---
+### ⏳ PENDIENTE
+---
 
-
-## 📌 Estado actual del laboratorio
-
-- ✔ Ubuntu Server instalado y documentado  
-- ✔ Wazuh 4.4.x instalado correctamente  
-- ✔ Certificados funcionales  
-- ✔ Dashboard accesible  
-- ✔ Estructura del repositorio creada  
-- ✔ Windows Pro Instalado
-- ✔ Sysmon Instalado  
-- ⏳ Kali Linux pendiente de configuración  
-- ⏳ Casos prácticos en desarrollo  
-
-## 🚧 Próximamente
-
-Los siguientes módulos están en desarrollo y se publicarán a medida que se completen:
-- Primeros casos prácticos (Caso 01, Caso 02…)
-- Escenarios iniciales Red Team
-- Alertas personalizadas en Wazuh
+- Kali Linux  
+- Escenarios Red Team completos  
+- Creación y documentación del módulo Active Directory (instalación, OUs, GPOs, unión de clientes)
 
 
 
