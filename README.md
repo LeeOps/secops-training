@@ -136,8 +136,6 @@ Inicialmente se utilizará para:
 
 - Reconocimiento de servicios
 - Escaneo de puertos
-- Pruebas de autenticación
-- Fuerza bruta controlada
 - Generación de eventos destinados a validar reglas de detección.
 
   
