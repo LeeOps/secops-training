@@ -185,7 +185,7 @@ El servicio permite generar eventos relacionados con:
 
 Los logs generados son enviados a Wazuh para su análisis.
 
-#  MySQL
+###  MySQL
 
 Servidor MySQL configurado como entorno de pruebas.
 
@@ -201,7 +201,7 @@ Usuario administrativo de laboratorio;
 
 Su finalidad es permitir posteriormente pruebas controladas de enumeración, autenticación y acceso a datos.
 
-#  Apache
+###  Apache
 
 Servidor web Apache utilizado para generar eventos HTTP.
 
@@ -293,6 +293,10 @@ secops-training
 │   │   └── README.md
 │   │
 │   ├── wazuh
+│   |  ├── img
+│   |  └── README.md
+│   │
+│   └── windows
 │       ├── img
 │       └── README.md
 |
@@ -330,7 +334,7 @@ secops-training
 ```
 
 ---
-Próximas fases
+# Próximas fases
 ---
 
 Las siguientes fases del proyecto serán:
@@ -392,7 +396,7 @@ El laboratorio está diseñado exclusivamente para formación y pruebas en un en
 
 
 ---
-⏳ Pendiente
+#⏳ Pendiente
 ---
 
 Incorporación de Kali Linux.
