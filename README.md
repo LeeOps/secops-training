@@ -396,7 +396,7 @@ El laboratorio está diseñado exclusivamente para formación y pruebas en un en
 
 
 ---
-#⏳ Pendiente
+⏳ Pendiente
 ---
 
 Incorporación de Kali Linux.
