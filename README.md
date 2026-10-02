@@ -127,7 +127,7 @@ Incluye:
 - Registros del sistema operativo
   
 
-### 🟪 3. Kali Linux (equipo atacante)
+### 🟪 3. Kali Linux (equipo de pruebas)
 ⏳ Pendiente
 
 Se incorporará una máquina Kali Linux como equipo destinado a ejecutar pruebas controladas contra los servicios vulnerables del laboratorio.
