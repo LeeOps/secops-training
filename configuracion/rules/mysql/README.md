@@ -1,62 +1,57 @@
-# Reglas MYSQL para Wazuh 
-Porque MySQL vulnerable es maravilloso para aprender…  
-pero si no añades reglas personalizadas, Wazuh verá el robo de tu base de datos **como quien ve pasar una nube**: lo mira, lo ignora… y sigue rascándose el índice.
+# Reglas MySQL y phpMyAdmin para Wazuh
 
-Este módulo existe para que tu SIEM no solo presuma de dashboard bonito, sino que **detecte cosas que importan de verdad**.
+El laboratorio contiene **9 reglas personalizadas** para detectar actividad en MySQL, instalaciones de paquetes y accesos web relacionados con phpMyAdmin.
 
----
-##  ¿Qué hace este módulo?
----
+## Inventario de reglas
 
-Añade un archivo de reglas que permite a Wazuh decir cosas como:
+| ID | Nivel | Función | Fuente |
+| --- | ---: | --- | --- |
+| 900001 | 7 | Intento fallido de acceso del usuario admin | MySQL general.log |
+| 900002 | 10 | Conexión TCP/IP desde un equipo no local | MySQL general.log |
+| 900003 | 10 | Ejecución de mysqldump mediante sudo | auth.log |
+| 900004 | 10 | Solicitud HTTP a /backup.sql | Apache access log |
+| 900005 | 9 | Activación de general_log mediante SET | MySQL general.log |
+| 900006 | 12 | Consulta con referencia a password | Registro de texto SQL |
+| 900007 | 8 | Instalación del paquete phpmyadmin | dpkg.log |
+| 900008 | 10 | Solicitud HTTP a /phpmyadmin | Apache access log |
+| 900009 | 12 | Solicitud HTTP con login.php o token= | Apache access log |
 
-- “Eh, aquí están intentando entrar como _admin_ desde medio internet.”
-- “¿mysqldump ejecutado? Igual están levantándose tus datos…”
-- “Te han descargado el backup expuesto, por si tenías dudas.”
-- “Están trasteando phpMyAdmin. Y no para ver el logo.”
-- “Alguien activó el general_log… o sea, filtración garantizada.”
+Las alertas indican eventos observables; no prueban por sí solas exfiltración, exposición a Internet ni fuerza bruta. La regla 900003 solo cubre ejecuciones mediante sudo, la 900005 detecta cambios por SQL y la 900009 busca patrones de URL sin restringirse necesariamente al directorio de phpMyAdmin. La regla 900006 utiliza una coincidencia textual y puede requerir más ajustes para evitar falsos positivos.
 
-Vamos, lo que un SIEM decente debería gritar **antes** de que desaparezca la base de datos.
+## Archivos
 
----
-## ¿Dónde están las reglas?
----
+- Reglas: configuracion/rules/mysql/mysql.xml
+- Decodificador: configuracion/decoders/mysql_decoder.xml
 
-Aquí:  
-`rules/mysql/mysql.xml`
+## Instalación
 
-Dentro tienes:
+Desde la raíz del repositorio, copiar los archivos:
 
-- detección de usuario débil
-- acceso remoto
-- mysqldump sospechoso
-- acceso al backup expuesto
-- activación del general_log
-- detección de phpMyAdmin
-- intentos de login
-- reglas combinadas de criticidad
-
-Vamos, un pack completo para que Wazuh parezca inteligente.
-
----
-## 1. Copia el archivo de reglas 
----
-
-```
-# Si no has clonado aún:
-git clone https://github.com/LeeOps/secops-training 
-cd secops-training  
-
-# Copiar reglas al Wazuh Manager:
-sudo cp configuracion/rules/mysql/mysql.xml /var/ossec/etc/rules
+```bash
+sudo cp configuracion/rules/mysql/mysql.xml /var/ossec/etc/rules/
+sudo cp configuracion/decoders/mysql_decoder.xml /var/ossec/etc/decoders/
 ```
 
-Si lo pones en otro sitio, Wazuh hará lo que mejor sabe:  
-**ignorar tus ilusiones**.
+Añadir dentro de la configuración de Wazuh (/var/ossec/etc/ossec.conf):
 
-![Reglas mysql](img/rules.png)
+```xml
+<localfile>
+  <log_format>syslog</log_format>
+  <location>/var/log/mysql/general.log</location>
+</localfile>
+```
 
-Y ya estaría
-A partir de aquí, cada intento fallido, ataque torpe o acceso de root  quedará registrado.
+MySQL debe tener habilitado general_log; Wazuh debe tener acceso de lectura a ese archivo. Para las reglas 900003, 900007 y las de acceso web también deben recogerse auth.log, dpkg.log y el registro de accesos de Apache, respectivamente. Mantener el laboratorio aislado y evitar incluir contraseñas reales en los registros compartidos.
 
----
+Validar la configuración y reiniciar:
+
+```bash
+sudo /var/ossec/bin/wazuh-analysisd -t
+sudo /var/ossec/bin/wazuh-logcollector -t
+sudo systemctl restart wazuh-manager
+sudo systemctl is-active wazuh-manager
+```
+
+Probar las detecciones con `sudo /var/ossec/bin/wazuh-logtest`.
+
+Las nueve reglas se han activado con registros reproducidos o eventos simulados en wazuh-logtest. Queda pendiente comprobarlas de extremo a extremo con tráfico real y revisar falsos positivos.
