@@ -1,25 +1,16 @@
-<!--
-  LeeOps – MySQL Vulnerable Lab
-  Reglas Wazuh para detectar actividades críticas:
-  - Usuario admin débil
-  - Accesos remotos a MySQL
-  - Mysqldump (exfiltración)
-  - Backup expuesto
-  - Logs sensibles (general_log)
-  - phpMyAdmin expuesto y accesos
--->
-
+<!-- Reglas Wazuh para MySQL y phpMyAdmin -->
 <group name="leeops_mysql_vuln">
 
-  <!-- 1. Intentos de acceso fallido al usuario admin -->
+  <!-- 1. Autenticacion fallida del usuario admin -->
   <rule id="900001" level="7">
-    <if_sid>18107</if_sid>
-    <match>Acceso denegado 'admin'@</match>
-    <description>Intento de acceso fallido al usuario admin (contraseña débil expuesta).</description>
-    <group>mysql,authentication,weak_password,</group>
+    <decoded_as>mysql-general</decoded_as>
+    <action>Connect</action>
+    <extra_data type="pcre2">(?i)Access denied for user 'admin'@</extra_data>
+    <description>MySQL: intento fallido de autenticación del usuario admin.</description>
+    <group>mysql,authentication_failed,</group>
   </rule>
 
-  <!-- 2. Conexiones remotas a MySQL desde IP externa -->
+  <!-- 2. Conexion TCP/IP desde un host no local -->
   <rule id="900002" level="10">
     <decoded_as>mysql-general</decoded_as>
     <action>Connect</action>
@@ -28,58 +19,59 @@
     <group>mysql,network,remote_connection,</group>
   </rule>
 
-  <!-- 3. Ejecución de mysqldump (posible robo de base de datos) -->
-  <rule id="900003" level="12">
-    <if_sid>530</if_sid>
-    <match>mysqldump</match>
-    <description>mysqldump ejecutado. Posible exfiltración de base de datos.</description>
-    <group>mysql,exfiltration,backup,</group>
+  <!-- 3. Ejecucion de mysqldump mediante sudo -->
+  <rule id="900003" level="10">
+    <if_sid>5402,5403</if_sid>
+    <field name="command" type="pcre2">(^|[\s/])mysqldump(\s|$)</field>
+    <description>MySQL: ejecucion de mysqldump mediante sudo. Revisar exportacion de datos.</description>
+    <group>mysql,backup,database_export,</group>
   </rule>
 
-  <!-- 4. Acceso al archivo backup.sql expuesto en la web -->
+  <!-- 4. Solicitud HTTP al archivo backup.sql -->
   <rule id="900004" level="10">
-    <if_sid>31101</if_sid>
+    <if_sid>31100,31108</if_sid>
     <match>/backup.sql</match>
     <description>Acceso al archivo backup.sql expuesto públicamente.</description>
     <group>web,exposure,critical_data,</group>
   </rule>
 
-  <!-- 5. Activación del general_log (riesgo de filtración total) -->
+  <!-- 5. Activacion de general_log mediante consulta SQL -->
   <rule id="900005" level="9">
-    <if_sid>18107</if_sid>
-    <match>general_log</match>
-    <description>El general_log ha sido activado. Riesgo de filtración de consultas sensibles.</description>
-    <group>mysql,debug,logging_risk,</group>
+    <decoded_as>mysql-general</decoded_as>
+    <action>Query</action>
+    <extra_data type="pcre2">(?i)\bSET\s+(?:GLOBAL\s+|@@GLOBAL\.)?general_log\s*=\s*(?:ON|1)\b</extra_data>
+    <description>MySQL: activacion de general_log mediante una consulta SQL.</description>
+    <group>mysql,configuration_change,logging,</group>
   </rule>
 
-  <!-- 6. Queries que contienen contraseñas dentro del general.log -->
+  <!-- 6. Referencia a contrasenas en una consulta SQL -->
   <rule id="900006" level="12">
     <regex type="pcre2">(INSERT|UPDATE|SELECT).*password</regex>
-    <description>Query con referencia a contraseñas detectada en general.log</description>
+    <description>MySQL: consulta SQL con referencia a contraseñas.</description>
     <group>mysql,cred_leak,sql,</group>
   </rule>
 
-  <!-- 7. Instalación o detección de phpMyAdmin -->
-  <rule id="900007" level="6">
-    <if_sid>530</if_sid>
-    <match>phpmyadmin</match>
-    <description>phpMyAdmin instalado o detectado. Revisar exposición.</description>
-    <group>web,exposed_service,phpmyadmin,</group>
+  <!-- 7. Instalacion del paquete phpmyadmin -->
+  <rule id="900007" level="8">
+    <if_sid>2902</if_sid>
+    <field name="package" type="pcre2">^phpmyadmin$</field>
+    <description>MySQL: instalacion del paquete phpMyAdmin detectada.</description>
+    <group>web,phpmyadmin,software_installation,</group>
   </rule>
 
-  <!-- 8. Accesos HTTP a la ruta /phpmyadmin -->
+  <!-- 8. Solicitud HTTP a /phpmyadmin -->
   <rule id="900008" level="10">
-    <if_sid>31101</if_sid>
+    <if_sid>31100,31108</if_sid>
     <match>/phpmyadmin</match>
     <description>Acceso a phpMyAdmin. Servicio crítico expuesto.</description>
     <group>web,phpmyadmin,attack_surface,</group>
   </rule>
 
-  <!-- 9. Intentos de login en phpMyAdmin -->
+  <!-- 9. Solicitud HTTP a login.php o token= -->
   <rule id="900009" level="12">
-    <if_sid>31101</if_sid>
+    <if_sid>31100,31108</if_sid>
     <regex type="pcre2">(login\.php|token=)</regex>
-    <description>Intento de login en phpMyAdmin. Posible fuerza bruta.</description>
+    <description>phpMyAdmin: solicitud HTTP al formulario de acceso.</description>
     <group>web,phpmyadmin,bruteforce,</group>
   </rule>
 
