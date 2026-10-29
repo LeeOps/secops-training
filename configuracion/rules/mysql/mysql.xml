@@ -21,10 +21,11 @@
 
   <!-- 2. Conexiones remotas a MySQL desde IP externa -->
   <rule id="900002" level="10">
-    <if_sid>5715</if_sid>
-    <match>mysql</match>
-    <description>Conexión remota a MySQL desde IP externa. MySQL expuesto al mundo.</description>
-    <group>mysql,network,exposed_service,</group>
+    <decoded_as>mysql-general</decoded_as>
+    <action>Connect</action>
+    <extra_data type="pcre2">@(?!(?:localhost|127\.0\.0\.1|::1)\b)[^\s]+.*using TCP/IP</extra_data>
+    <description>MySQL: conexión mediante TCP/IP desde un host no local.</description>
+    <group>mysql,network,remote_connection,</group>
   </rule>
 
   <!-- 3. Ejecución de mysqldump (posible robo de base de datos) -->
