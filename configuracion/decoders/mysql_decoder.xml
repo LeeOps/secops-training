@@ -1,0 +1,9 @@
+<decoder name="mysql-general">
+  <prematch type="pcre2">\b(Query|Connect|Quit)\s</prematch>
+</decoder>
+
+<decoder name="mysql-general-fields">
+  <parent>mysql-general</parent>
+  <regex type="pcre2">\b(Query|Connect|Quit)\s+(.*)$</regex>
+  <order>action,extra_data</order>
+</decoder>
