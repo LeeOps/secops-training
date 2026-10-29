@@ -53,7 +53,7 @@
 
   <!-- 6. Queries que contienen contraseñas dentro del general.log -->
   <rule id="900006" level="12">
-    <regex>(INSERT|UPDATE|SELECT).*password</regex>
+    <regex type="pcre2">(INSERT|UPDATE|SELECT).*password</regex>
     <description>Query con referencia a contraseñas detectada en general.log</description>
     <group>mysql,cred_leak,sql,</group>
   </rule>
@@ -77,17 +77,19 @@
   <!-- 9. Intentos de login en phpMyAdmin -->
   <rule id="900009" level="12">
     <if_sid>31101</if_sid>
-    <regex>(login\.php|token=)</regex>
+    <regex type="pcre2">(login\.php|token=)</regex>
     <description>Intento de login en phpMyAdmin. Posible fuerza bruta.</description>
     <group>web,phpmyadmin,bruteforce,</group>
   </rule>
 
   <!-- 10. Evento crítico: servicios expuestos + fuga de credenciales -->
+  <!-- Regla pendiente de rediseño: correlación no validada
   <rule id="900099" level="15">
     <if_group>exposed_service</if_group>
     <if_group>cred_leak</if_group>
     <description>Escenario crítico: servicio expuesto + fuga de credenciales + actividad sospechosa.</description>
     <group>critical,siem,incident,</group>
   </rule>
+  -->
 
 </group>
