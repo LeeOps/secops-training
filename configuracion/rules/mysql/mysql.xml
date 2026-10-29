@@ -83,14 +83,4 @@
     <group>web,phpmyadmin,bruteforce,</group>
   </rule>
 
-  <!-- 10. Evento crítico: servicios expuestos + fuga de credenciales -->
-  <!-- Regla pendiente de rediseño: correlación no validada
-  <rule id="900099" level="15">
-    <if_group>exposed_service</if_group>
-    <if_group>cred_leak</if_group>
-    <description>Escenario crítico: servicio expuesto + fuga de credenciales + actividad sospechosa.</description>
-    <group>critical,siem,incident,</group>
-  </rule>
-  -->
-
 </group>
