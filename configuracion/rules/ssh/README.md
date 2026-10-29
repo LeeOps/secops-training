@@ -1,60 +1,46 @@
-# Reglas SSH para Wazuh 
-Porque sí, Wazuh es muy listo…  
-pero si no le pones reglas personalizadas, un ataque de fuerza bruta SSH le pasa por delante **como si fuera un repartidor de Amazon**: lo ve, lo saluda, y sigue a lo suyo.
+# Reglas SSH para Wazuh
 
-Este módulo existe para que tu SIEM haga algo más que decorar el dashboard.
+Este módulo contiene **5 reglas personalizadas** para supervisar intentos fallidos, posibles ataques de fuerza bruta y autenticaciones SSH.
 
----
-##  ¿Qué hace este módulo?
----
+## Inventario de reglas
 
-Añade un archivo de reglas que permite a Wazuh decir:
+| ID | Nivel | Función | Condición |
+| --- | ---: | --- | --- |
+| 100200 | 5 | Intento fallido de autenticación | Reglas base SSH 5710 o 5760 |
+| 100201 | 7 | Múltiples fallos de autenticación | 5 coincidencias de 100200 en 60 segundos |
+| 100202 | 10 | Posible fuerza bruta desde una misma IP | 10 coincidencias de 100200 en 120 segundos y misma IP |
+| 100203 | 5 | Autenticación SSH correcta | Regla base 5715 |
+| 100204 | 8 | Acceso por contraseña como root | Regla base 5715 y texto Accepted password for root |
 
-- “Eh, aquí están fallando contraseñas como si regalaran cuentas de Netflix”
-- “Oye, esta IP está pegando martillazos en SSH”
-- “Vale… después de 50 intentos, han entrado. Igual deberíamos preocuparnos”
+Las reglas 100201 y 100202 detectan acumulaciones de fallos que pueden indicar fuerza bruta. La regla 100203 detecta una autenticación correcta, **no** demuestra un compromiso ni un acceso conseguido después de varios fallos.
 
-Vamos, lo mínimo que se espera de un SIEM que cobra por CPU.
+## Instalación
 
----
-## Dónde están las reglas
----
+Archivo: `configuracion/rules/ssh/ssh-bruteforce.xml`
 
-Aquí:
-`rules/ssh/ssh-bruteforce.xml`
+Desde la raíz del repositorio:
 
-Dentro está todo: detección de fallos, frecuencia, IP, logins sospechosos y demás alegrías.
-
----
-## Requisitos (no te asustes)
----
-
-- Tener un **Wazuh Manager** funcionando
-- Que tu Linux esté enviando los logs del SSH (auth.log)
-- Tener manos para escribir `sudo`
-- Ganas de ver el dashboard explotar en alertas
-
-No necesitas nada más que copiar un archivo.
-
----
-## 1. Copia el archivo de reglas 
----
-
-```
-# Solo si no lo has hecho antes
-git clone https://github.com/LeeOps/secops-training
-cd secops-training
-
-# Copia el archivo de reglas al Wazuh Manager
-sudo cp configuracion/rules/ssh/ssh-bruteforce.xml /var/ossec/etc/rules
+```bash
+sudo cp configuracion/rules/ssh/ssh-bruteforce.xml /var/ossec/etc/rules/
 ```
 
-Si lo pones en otro sitio, Wazuh llorará. 
+El servidor debe recoger los eventos SSH de `/var/log/auth.log` en `/var/ossec/etc/ossec.conf`:
 
-![Reglas ssh](img/copy_rule.png)
+```xml
+<localfile>
+  <log_format>syslog</log_format>
+  <location>/var/log/auth.log</location>
+</localfile>
+```
 
----
-## Y ya estaría
-A partir de aquí, cada intento fallido, ataque torpe o acceso de root  quedará registrado.
+Validar las reglas y reiniciar el Manager:
 
----
+```bash
+sudo /var/ossec/bin/wazuh-analysisd -t
+sudo systemctl restart wazuh-manager
+sudo systemctl is-active wazuh-manager
+```
+
+## Verificación
+
+Usar `sudo /var/ossec/bin/wazuh-logtest` para introducir eventos de autenticación SSH. Las cinco reglas se han activado en pruebas con registros simulados, incluida la acumulación de eventos para las reglas de frecuencia. Queda pendiente comprobar el funcionamiento completo con conexiones reales y posibles falsos positivos.
