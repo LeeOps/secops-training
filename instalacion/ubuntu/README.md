@@ -4,7 +4,7 @@
 ## 0. Preparación del entorno
 ---
 
-### Descarga de Ubuntu Server 22.04 LTS
+### Descarga de Ubuntu Server 24.04.3 LTS
 
 Sistema operativo obtenido desde la página oficial de Canonical:
 
