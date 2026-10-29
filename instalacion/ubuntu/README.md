@@ -1,4 +1,4 @@
-# ✅ Instalación de Ubuntu Server 22.04 LTS 
+# ✅ Instalación de Ubuntu Server 24.04.3 LTS 
 
 ---
 ## 0. Preparación del entorno
@@ -12,7 +12,7 @@ Sistema operativo obtenido desde la página oficial de Canonical:
 [https://ubuntu.com/download/server/thank-you?version=22.04.5&architecture=amd64&lts=true](https://ubuntu.com/download/server/thank-you?version=22.04.5&architecture=amd64&lts=true)
 
 **ISO descargada:**  
-`ubuntu-22.04.5-live-server-amd64.iso`
+`ubuntu-24.04.3-live-server-amd64.iso`
 
 ![Descarga Ubuntu](img/descarga_ubuntu.png)
 
@@ -22,7 +22,7 @@ Sistema operativo obtenido desde la página oficial de Canonical:
 En Linux/macOS:
 
 ```
-sha256sum ubuntu-22.04.5-live-server-amd64.iso
+sha256sum ubuntu-24.04.3-live-server-amd64.iso
 ```
 
 En Windows (PowerShell):
@@ -30,7 +30,7 @@ En Windows (PowerShell):
 ![Descarga Ubuntu](img/ps.png)
 
 Comparar con el valor oficial de Canonical:  
-[https://releases.ubuntu.com/22.04.5/SHA256SUMS](https://releases.ubuntu.com/22.04.5/SHA256SUMS)
+[https://releases.ubuntu.com/24.03.3/SHA256SUMS](https://releases.ubuntu.com/22.04.5/SHA256SUMS)
 
 ![Descarga Ubuntu](img/sha.png)
 Si coinciden, la ISO es íntegra y segura para su uso en el laboratorio.
