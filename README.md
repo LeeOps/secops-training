@@ -216,15 +216,15 @@ Se han creado reglas Wazuh destinadas a detectar accesos a determinados recursos
 # Reglas personalizadas de Wazuh
 ---
 
-El laboratorio dispone de **24 reglas personalizadas** verificadas con `wazuh-logtest`:
+El laboratorio dispone de **20 reglas personalizadas** verificadas con `wazuh-logtest`:
 
 | Servicio | Reglas |
 | --- | ---: |
 | SSH | 5 |
 | FTP | 5 |
-| MySQL | 9 |
+| MySQL | 5 |
 | Apache | 5 |
-| **Total** | **24** |
+| **Total** | **20** |
 
 La documentación sobre los agentes, los decodificadores y las reglas está organizada en [Configuración](configuracion/README.md). Para conocer la sintaxis de las reglas, los niveles, las dependencias, la correlación y las instrucciones de prueba, consultar el [README de reglas](configuracion/rules/README.md).
 
