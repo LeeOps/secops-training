@@ -1,4 +1,4 @@
-<!-- Reglas Wazuh para MySQL y phpMyAdmin -->
+<!-- Cinco reglas Wazuh del escenario MySQL -->
 <group name="leeops_mysql_vuln">
 
   <!-- 1. Autenticacion fallida del usuario admin -->
@@ -42,37 +42,6 @@
     <extra_data type="pcre2">(?i)\bSET\s+(?:GLOBAL\s+|@@GLOBAL\.)?general_log\s*=\s*(?:ON|1)\b</extra_data>
     <description>MySQL: activacion de general_log mediante una consulta SQL.</description>
     <group>mysql,configuration_change,logging,</group>
-  </rule>
-
-  <!-- 6. Referencia a contrasenas en una consulta SQL -->
-  <rule id="900006" level="12">
-    <regex type="pcre2">(INSERT|UPDATE|SELECT).*password</regex>
-    <description>MySQL: consulta SQL con referencia a contraseñas.</description>
-    <group>mysql,cred_leak,sql,</group>
-  </rule>
-
-  <!-- 7. Instalacion del paquete phpmyadmin -->
-  <rule id="900007" level="8">
-    <if_sid>2902</if_sid>
-    <field name="package" type="pcre2">^phpmyadmin$</field>
-    <description>MySQL: instalacion del paquete phpMyAdmin detectada.</description>
-    <group>web,phpmyadmin,software_installation,</group>
-  </rule>
-
-  <!-- 8. Solicitud HTTP a /phpmyadmin -->
-  <rule id="900008" level="10">
-    <if_sid>31100,31108</if_sid>
-    <match>/phpmyadmin</match>
-    <description>Acceso a phpMyAdmin. Servicio crítico expuesto.</description>
-    <group>web,phpmyadmin,attack_surface,</group>
-  </rule>
-
-  <!-- 9. Solicitud HTTP a login.php o token= -->
-  <rule id="900009" level="12">
-    <if_sid>31100,31108</if_sid>
-    <regex type="pcre2">(login\.php|token=)</regex>
-    <description>phpMyAdmin: solicitud HTTP al formulario de acceso.</description>
-    <group>web,phpmyadmin,bruteforce,</group>
   </rule>
 
 </group>
