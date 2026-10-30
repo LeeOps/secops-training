@@ -1,15 +1,15 @@
 # Reglas personalizadas de Wazuh
 ---
 
-Las reglas permiten identificar eventos relevantes en los registros de los servicios y generar alertas para su análisis. En este laboratorio se han configurado **24 reglas personalizadas**, distribuidas entre los cuatro servicios:
+Las reglas permiten identificar eventos relevantes en los registros de los servicios y generar alertas para su análisis. En este laboratorio se han configurado **20 reglas personalizadas**, distribuidas entre los cuatro servicios:
 
 | Servicio | Reglas | Archivos |
 | --- | ---: | --- |
 | SSH | 5 | [Reglas y documentación](ssh/README.md) |
 | FTP | 5 | [Reglas y documentación](ftp/README.md) |
-| MySQL | 9 | [Reglas y documentación](mysql/README.md) |
+| MySQL | 5 | [Reglas y documentación](mysql/README.md) |
 | Apache | 5 | [Reglas y documentación](apache/README.md) |
-| **Total** | **24** | |
+| **Total** | **20** | |
 
 ## ¿Cómo procesa Wazuh un evento?
 
@@ -85,7 +85,7 @@ En la salida de `wazuh-logtest` se revisan especialmente:
 - **Phase 2:** decodificador utilizado y campos reconocidos.
 - **Phase 3:** identificador, nivel y descripción de la regla activada.
 
-**Estado de validación:** las 24 reglas personalizadas se han comprobado con eventos de prueba en `wazuh-logtest`. Sigue pendiente verificar el ciclo completo de generación de tráfico real, detección en Wazuh Dashboard, análisis y respuesta.
+**Estado de validación:** las 20 reglas personalizadas se han comprobado con eventos de prueba en `wazuh-logtest`. Sigue pendiente verificar el ciclo completo de generación de tráfico real, detección en Wazuh Dashboard, análisis y respuesta.
 
 ---
 
