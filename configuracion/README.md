@@ -29,7 +29,7 @@ Cada guía enlaza a la documentación técnica específica, con sus comandos de 
 
 - Wazuh Manager, Indexer y Dashboard operativos en Ubuntu Server.
 - Agente Windows **005 / WindowsPRO-1** conectado, con eventos Sysmon visibles en el Dashboard.
-- **24 reglas personalizadas** verificadas con `wazuh-logtest`: SSH (5), FTP (5), MySQL (9), Apache (5).
+- **20 reglas personalizadas** verificadas con `wazuh-logtest`: SSH (5), FTP (5), MySQL (5), Apache (5).
 - Pendiente: pruebas completas con tráfico real, escenarios definidos, análisis y respuesta.
 
 **La coincidencia de una regla no demuestra por sí sola la explotación de una vulnerabilidad.**
